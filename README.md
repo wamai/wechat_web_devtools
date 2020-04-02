@@ -1,48 +1,37 @@
-# Linux微信web开发者工具
+# Linux微信开发者工具
 
-linux 下使用微信web开发者工具.
-
-![wx_dev_tools v1.02.1910121](https://img.shields.io/badge/wx_dev_tools-1.02.1910121-green.svg)
-![nw.js v0.24.4](https://img.shields.io/badge/nw.js-v0.24.4-blue.svg)
+linux 下使用微信开发者工具.
 
 ## Description
 
-**Linux微信web开发者工具**, 可在 `linux` 桌面环境跑起 `微信开发者工具`,
+**Linux微信开发者工具**, 可在 `linux` Docker环境跑起 `微信开发者工具`,
 原理是 `微信开发者工具` 本质是 `nw.js` 程序, 把它移植到 `linux` 下没大问题.
 负责编译 `wxml` 和 `wxss` 的 `wcc` 和 `wcsc` (可能还有其他功能),
 则利用 `wine` 来跑即可.
 
-## Usage
+## 初始化
 
-### 下载项目和初始化
-
-``` bash
-git clone https://github.com/cytle/wechat_web_devtools.git
-cd wechat_web_devtools
-# 自动下载最新 `nw.js` , 同时部署目录 `~/.config/wechat_web_devtools/`
-./bin/wxdt install
+### 下载 docker 镜像
+```sh
+docker pull boringcat/wxdt:latest
 ```
 
-### 启动ide，开发和调试网页
+### 标签对应列表
 
-运行准备:
+| 标签 | 描述 | 备注 |
+| :---: | :---: | :---- |
+| latest | 最新本地运行镜像 | 需要 `xhost +` (下方有说明) |
+| novnc-latest | 最新novnc镜像 | 需要转发端口80 (巨型镜像警告) |
+| [\d\\.]+ | 指定微信开发者工具版本 | |
+| novnc-[\d\\.]+ | 指定微信开发者工具版本 | |
 
-1. `GUI`环境
+## 启动
 
-``` bash
-./bin/wxdt # 启动
-```
-
-### 启动ide，开发和预览小程序
-
-运行准备:
-
-1. `GUI`环境
-2. 需要[安装`wine`](#安装Wine)
-3. 并且已经执行过`./bin/wxdt install`
-
-``` bash
-./bin/wxdt # 启动
+```sh
+docker run --name=wxdt -d \
+  -v /tmp/.X11-unix:/tmp/.X11-unix \
+  -v $PWD:/projects \
+  boringcat/wxdt:latest
 ```
 
 ### 命令行和HTTP调用
@@ -61,34 +50,19 @@ cd wechat_web_devtools
 - [命令行 调用 · 小程序](https://developers.weixin.qq.com/miniprogram/dev/devtools/cli.html)
 - [HTTP 调用 · 小程序](https://developers.weixin.qq.com/miniprogram/dev/devtools/http.html)
 
-### Docker
+### NoVnc
 
-未安装`wine`，仅限`cli`调用
-
-可以直接`run`
-
-``` bash
-docker run -it \
-    -v $PWD:/projects \
-    canyoutle/wxdt \
-    sh -c "cli -l && cli -p /projects/your-project"
+```sh
+docker run --name=wxdt -d \
+  -v $PWD:/projects \
+  -p 6080:80 \
+  boringcat/wxdt:novnc-latest
 ```
 
-或是启动一个持久的容器
+-----------
+**以下内容未改动**  
 
-``` bash
-docker run -d \
-    --name wxdt \
-    -p 6080:80 \
-    -v $PWD:/projects \
-    canyoutle/wxdt
-
-docker exec -it wxdt cli -l # 登录
-docker exec -it wxdt cli -p /projects/your-project # 预览工程
-
-docker stop wxdt # 暂停容器
-docker start wxdt # 下次使用，不用再run，可以直接exec
-```
+-----------
 
 ## 其它说明
 
@@ -196,8 +170,8 @@ sudo fc-list|grep Consol
 
 ### 卸载
 
-1. 关闭 `微信web开发者工具`
-2. 项目文件夹下运行 `./bin/wxdt uninstall` (删除桌面图标、微信web开发者工具配置目录),
+1. 关闭 `微信开发者工具`
+2. 项目文件夹下运行 `./bin/wxdt uninstall` (删除桌面图标、微b开发者工具配置目录),
    **开发者工具配置文件, 所有工程和登录信息均会消失**
 3. 删除项目文件夹
 
