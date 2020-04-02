@@ -134,11 +134,11 @@ bash "$root_dir/bin/fix_package_name.sh"
 # start_step 'fix: 重新编译node-sync-ipc'
 # bash "$root_dir/bin/fix_node_sync_ipc.sh"
 
-start_step 'doc: 更新文档'
+# start_step 'doc: 更新文档'
 
-sed -ri \
-    -e "s#(wx_dev_tools)( v|-)[0-9][0-9.]*#\1\2$wechat_v#g" \
-    "$root_dir/README.md"
+# sed -ri \
+#     -e "s#(wx_dev_tools)( v|-)[0-9][0-9.]*#\1\2$wechat_v#g" \
+#     "$root_dir/README.md"
 
 # echo "- $(date +%Y/%m/%d) 更新:微信小程序升级到$wechat_v" >> "$root_dir/CHANGELOG.md"
 

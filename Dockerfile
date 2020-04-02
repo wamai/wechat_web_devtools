@@ -5,9 +5,21 @@
 
 FROM dorowu/ubuntu-desktop-lxde-vnc:bionic
 
-RUN sed -i 's#http://\(archive\|security\).ubuntu.com/#http://mirrors.aliyun.com/#' /etc/apt/sources.list \
-  && cat /etc/apt/sources.list
-RUN apt-get update \
+ARG DOWNLOAD_URL=https://servicewechat.com/wxa-dev-logic/download_redirect?type=x64&from=mpwiki
+ARG VERSION=1.02.2003250
+ARG NWJS_VERSION=0.38.0
+
+ENV LANG=C.UTF-8\
+    DISPLAY=:1.0\
+    HOME=/root\
+    PATH="/wxdt/bin:${PATH}"
+
+RUN set -xe \
+  && echo "deb http://mirrors.tuna.tsinghua.edu.cn/ubuntu/ bionic main restricted universe multiverse" > /etc/apt/sources.list \
+  && echo "deb http://mirrors.tuna.tsinghua.edu.cn/ubuntu/ bionic-updates main restricted universe multiverse" >> /etc/apt/sources.list \
+  && echo "deb http://mirrors.tuna.tsinghua.edu.cn/ubuntu/ bionic-backports main restricted universe multiverse" >> /etc/apt/sources.list \
+  && echo "deb http://mirrors.tuna.tsinghua.edu.cn/ubuntu/ bionic-security main restricted universe multiverse" >> /etc/apt/sources.list \
+  && apt-get update \
   && apt-get install -y --no-install-recommends --allow-unauthenticated \
     wget \
     gpg-agent \
@@ -16,34 +28,30 @@ RUN apt-get update \
     build-essential \
     ca-certificates \
     openssl \
-    gnupg2
+    gnupg2\
+    p7zip-full\
+  && echo "Asia/Shanghai" > /etc/timezone\
+  && dpkg-reconfigure -f noninteractive tzdata\
+  && apt-get -y autoremove && apt-get clean -y && apt-get autoclean -y && \
+  find /var/lib/apt/lists -type f -delete && \
+  find /var/cache -type f -delete && \
+  find /var/log -type f -delete && \
+  find /usr/share/doc -type f -delete && \
+  find /usr/share/man -type f -delete
 
-ENV LANG C.UTF-8
-ENV DISPLAY :1.0
-ENV HOME /root
-ENV PATH="/wxdt/bin:${PATH}"
-RUN echo "Asia/Shanghai" > /etc/timezone
-RUN dpkg-reconfigure -f noninteractive tzdata
-
-COPY . /wxdt
+COPY bin /wxdt/bin
+ADD wechat_web_devtools.tar.gz /root/.config
 
 # 将开发者工具加入supervisord
-RUN echo "\n\
-[program:wxdt]\n\
-priority=25\n\
-directory=/wxdt/bin/\n\
-command=bash wxdt start\n\
-stderr_logfile=/var/log/wxdt.err.log\n\
-stdout_logfile=/var/log/wxdt.out.log\n\
-" >> /etc/supervisor/conf.d/supervisord.conf
-
-# 将 /startup.sh 转到后台运行
-RUN sed -i \
+RUN set -xe \
+  && sed -i \
     -e s%'ln -s '%'ln -sf '% \
-    /startup.sh
-
-# 安装开发者工具，然后删除下载的文件
-RUN update_nwjs.sh \
-    && rm -rf /tmp/wxdt_xsp
+    /startup.sh\
+  # 安装开发者工具，然后删除下载的文件
+  && echo "${NWJS_VERSION}" > /wxdt/nwjs_v \
+  && touch /wxdt/wechat_v \
+  && update_nwjs.sh \
+  && update_package_nw.sh -l "${DOWNLOAD_URL}" -v "${VERSION}"\
+  && rm -rf /tmp/wxdt_xsp
 
 ENTRYPOINT [ "/wxdt/bin/docker-entrypoint.sh" ]
