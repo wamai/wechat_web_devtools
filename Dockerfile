@@ -1,8 +1,3 @@
-# canyoutle/wxdt
-# 开发者工具各版本docker image
-# Usage:
-# docker run -P -p 6080:80 -v $PWD:/weapps canyoutle/wxdt
-
 FROM dorowu/ubuntu-desktop-lxde-vnc:bionic
 
 ARG DOWNLOAD_URL=https://servicewechat.com/wxa-dev-logic/download_redirect?type=x64&from=mpwiki
@@ -10,7 +5,7 @@ ARG VERSION=1.02.2003250
 ARG NWJS_VERSION=0.38.0
 
 ENV LANG=C.UTF-8\
-    DISPLAY=:1.0\
+    DISPLAY=:1\
     HOME=/root\
     PATH="/wxdt/bin:${PATH}"
 
@@ -42,7 +37,6 @@ RUN set -xe \
 COPY bin /wxdt/bin
 ADD wechat_web_devtools.tar.gz /root/.config
 
-# 将开发者工具加入supervisord
 RUN set -xe \
   && sed -i \
     -e s%'ln -s '%'ln -sf '% \
