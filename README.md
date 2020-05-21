@@ -187,10 +187,6 @@ Arch Linux 及其衍生发行版，如 Manjaro，可以通过 AUR 进行安装�
 
 上面项目来自[wechat-v2ex](https://github.com/jectychen/wechat-v2ex)
 
-## 赞赏
-
-<img width="400px" height="400px" alt="赞赏码" src="https://raw.githubusercontent.com/cytle/wechat_web_devtools/master/images/%E5%BE%AE%E4%BF%A1%E8%B5%9E%E8%B5%8F%E7%A0%81.jpeg"/>
-
 ## Changelog
 
 - [更新日志](CHANGELOG.md)
@@ -198,4 +194,4 @@ Arch Linux 及其衍生发行版，如 Manjaro，可以通过 AUR 进行安装�
 
 ## 免责声明
 
-微信开发者工具版权归腾讯公司所有，本项目旨在交流学习之用。如有不当之处，请联系本人，邮箱：canyoutle@gmail.com
+微信开发者工具版权归腾讯公司所有，本项目旨在交流学习之用。如有不当之处，请联系本人，邮箱：loveywh@gmail.com
