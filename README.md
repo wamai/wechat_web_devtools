@@ -179,14 +179,6 @@ sudo fc-list|grep Consol
 
 Arch Linux 及其衍生发行版，如 Manjaro，可以通过 AUR 进行安装：https://aur.archlinux.org/packages/wechat-devtool/
 
-## 截图
-
-![截图1](https://github.com/cytle/wechat_web_devtools/raw/fb84550d2d9b9f40f7a80b896066e1933892eff9/images/截图1.png)
-
-![调试界面](https://github.com/cytle/wechat_web_devtools/raw/fb84550d2d9b9f40f7a80b896066e1933892eff9/images/调试界面.png)
-
-上面项目来自[wechat-v2ex](https://github.com/jectychen/wechat-v2ex)
-
 ## Changelog
 
 - [更新日志](CHANGELOG.md)
